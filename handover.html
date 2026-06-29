@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Handover Membre A → Équipe · World Happiness Report</title>
+<meta name="description" content="Document de handover : livrables Membre A, dictionnaire des colonnes, instructions par rôle — World Happiness Report.">
+<style>
+:root {
+  --ink:    #0D1527;
+  --bg:     #E9EDF6;
+  --surf:   #FFFFFF;
+  --bd:     #C6CCEA;
+  --bd-lt:  #DDE1F0;
+  --text:   #111827;
+  --muted:  #4A5170;
+  --code-c: #1A3A90;
+  --code-bg:#E0E7F8;
+
+  --a: #0A6946; --a-bg:#E2F5EB; --a-bd:#86EFAC;
+  --b: #1050B8; --b-bg:#E6EEFF; --b-bd:#BACDF8;
+  --c: #B84200; --c-bg:#FFF0E5; --c-bd:#FDAD72;
+  --d: #5415B2; --d-bg:#F0EAFF; --d-bd:#C2AAF8;
+  --ok:#065535; --ok-bg:#DCFCE7; --ok-bd:#86EFAC;
+  --hot:#991B1B; --hot-bg:#FEE2E2; --hot-bd:#FCA5A5;
+
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans:  system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono:  ui-monospace, 'Cascadia Code', 'SF Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14.5px;
+  line-height: 1.65;
+  padding-bottom: 96px;
+}
+
+/* ── ANIMATIONS ─────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero { animation: fadeUp .45s ease-out both; }
+  .section { animation: fadeUp .4s ease-out both; }
+  .section:nth-child(1){ animation-delay:.07s }
+  .section:nth-child(2){ animation-delay:.13s }
+  .section:nth-child(3){ animation-delay:.19s }
+  .section:nth-child(4){ animation-delay:.25s }
+  .section:nth-child(5){ animation-delay:.31s }
+}
+
+/* ── DARK HERO ──────────────────────────────── */
+.hero {
+  background: var(--ink);
+  padding: 52px 40px 44px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: 'WHR';
+  position: absolute;
+  right: -10px; top: -28px;
+  font-family: var(--serif);
+  font-size: 240px;
+  font-weight: normal;
+  color: rgba(255,255,255,.038);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.hero-inner { max-width: 840px; margin: 0 auto; }
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: 38px;
+  font-weight: normal;
+  color: #fff;
+  line-height: 1.18;
+  letter-spacing: -.5px;
+  text-wrap: balance;
+  margin-bottom: 10px;
+}
+.hero h1 span {
+  color: rgba(255,255,255,.42);
+  font-size: .82em;
+  display: block;
+  margin-top: 3px;
+}
+.hero .sub {
+  font-size: 14px;
+  color: rgba(255,255,255,.45);
+  margin-bottom: 30px;
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(255,255,255,.11);
+}
+.hero-meta .m { font-size: 12.5px; color: rgba(255,255,255,.45); }
+.hero-meta .m strong { color: rgba(255,255,255,.82); }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 2px;
+}
+.p-ok  { background:var(--ok-bg);  color:var(--ok);  border:1px solid var(--ok-bd); }
+.p-hot { background:var(--hot-bg); color:var(--hot); border:1px solid var(--hot-bd); }
+
+/* ── MAIN CONTENT ────────────────────────────── */
+.wrap {
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 52px 18px 0;
+}
+
+.section { margin-bottom: 56px; }
+
+.sh {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: normal;
+  color: var(--text);
+  text-wrap: balance;
+  letter-spacing: -.2px;
+  border-bottom: 1px solid var(--bd);
+  padding-bottom: 11px;
+  margin-bottom: 24px;
+}
+.sh .sh-note {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: normal;
+}
+
+/* ── FILE CARDS ──────────────────────────────── */
+.file-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.fc {
+  background: var(--surf);
+  border: 1px solid var(--bd);
+  padding: 20px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.fc-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  background: var(--bg);
+  color: var(--muted);
+  border: 1px solid var(--bd);
+  width: fit-content;
+  margin-bottom: 2px;
+}
+.fc-name {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--code-c);
+  word-break: break-all;
+  line-height: 1.4;
+}
+.fc-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+  flex: 1;
+}
+.fc-stats {
+  display: flex;
+  gap: 16px;
+  font-size: 11px;
+  color: var(--muted);
+  padding-top: 10px;
+  margin-top: 4px;
+  border-top: 1px solid var(--bd-lt);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── NOTES ───────────────────────────────────── */
+.note {
+  display: flex;
+  gap: 13px;
+  padding: 13px 16px;
+  font-size: 13px;
+  margin-top: 16px;
+}
+.note-mark {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  padding-top: 2px;
+  opacity: .65;
+}
+.note-body { flex: 1; }
+.n-ok     { background:var(--ok-bg);  border:1px solid var(--ok-bd); }
+.n-blue   { background:var(--b-bg);   border:1px solid var(--b-bd); }
+.n-amber  { background:var(--c-bg);   border:1px solid var(--c-bd); }
+.n-violet { background:var(--d-bg);   border:1px solid var(--d-bd); }
+.n-def    { background:#F4F5FA;       border:1px solid var(--bd); }
+
+/* ── FIGURE GRID ─────────────────────────────── */
+.fig-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.fi {
+  background: var(--surf);
+  border: 1px solid var(--bd);
+  padding: 12px 14px;
+}
+.fi.ph { background:var(--bg); border-style:dashed; }
+.fi-n {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.fi.ph .fi-n { color:var(--b); }
+.fi-lbl { font-size: 12px; line-height: 1.4; }
+.fi.ph .fi-lbl { color:var(--muted); }
+
+/* ── TABLES ──────────────────────────────────── */
+.dg { margin-bottom: 28px; }
+.dg-lbl {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 9px;
+}
+.tw { overflow-x: auto; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th {
+  background:var(--bg); text-align:left;
+  padding:7px 12px;
+  font-size:10px; font-weight:700; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--muted);
+  border-bottom:2px solid var(--bd);
+  white-space:nowrap;
+}
+td {
+  padding:8px 12px;
+  border-bottom:1px solid var(--bd-lt);
+  vertical-align:top; line-height:1.5;
+}
+tr:last-child td { border-bottom:none; }
+tbody tr:hover { background:#F2F5FD; }
+code {
+  font-family:var(--mono); font-size:11.5px;
+  background:var(--code-bg); color:var(--code-c);
+  padding:2px 5px; border-radius:2px;
+}
+.tag {
+  display:inline-block; font-size:8.5px; font-weight:700;
+  letter-spacing:.05em; text-transform:uppercase;
+  padding:2px 6px; border-radius:2px; margin-right:2px; white-space:nowrap;
+}
+.tb  { background:var(--b-bg); color:var(--b); }
+.tc  { background:var(--c-bg); color:var(--c); }
+.td  { background:var(--d-bg); color:var(--d); }
+.tok { background:var(--ok-bg); color:var(--ok); }
+.tnw { background:#FEF9C3; color:#78350F; }
+.tsc { background:#EEF2FF; color:#3730A3; }
+
+/* ── ROLE CARDS ──────────────────────────────── */
+.rc { border:1px solid var(--bd); margin-bottom:22px; overflow:hidden; }
+
+.rc-top {
+  position: relative;
+  overflow: hidden;
+  padding: 30px 34px 28px;
+}
+.rc-b .rc-top { background:var(--b); }
+.rc-c .rc-top { background:var(--c); }
+.rc-d .rc-top { background:var(--d); }
+
+.rc-top::after {
+  content: attr(data-l);
+  position: absolute;
+  right: 10px; bottom: -34px;
+  font-family: var(--serif);
+  font-size: 180px;
+  font-weight: normal;
+  color: rgba(255,255,255,.09);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.rc-top-inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+.rc-name {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: normal;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.rc-sub { font-size: 12.5px; color:rgba(255,255,255,.62); }
+
+.rc-body { background:var(--surf); padding:26px 34px; }
+
+/* ── TASKS ───────────────────────────────────── */
+.tasks { list-style:none; }
+.tasks li {
+  display:flex; gap:16px;
+  padding:11px 0;
+  border-bottom:1px solid var(--bd-lt);
+  font-size:13.5px; line-height:1.55;
+}
+.tasks li:last-child { border-bottom:none; }
+.tn {
+  font-family:var(--mono); font-size:10px; font-weight:700;
+  color:var(--muted); opacity:.5;
+  min-width:16px; padding-top:3px; flex-shrink:0;
+}
+.tb2 { flex:1; }
+.tb2 .hint {
+  display:block; font-size:12.5px;
+  color:var(--muted); margin-top:4px;
+}
+
+/* ── TIMELINE ────────────────────────────────── */
+.tl-wrap { position:relative; padding:10px 0 4px; }
+.tl-rail {
+  position:absolute; top:24px;
+  left:calc(10% + 7px); right:calc(10% + 7px);
+  height:2px; background:var(--bd);
+}
+.tl-done-rail {
+  position:absolute; top:24px;
+  left:calc(10% + 7px);
+  width:calc(40% - 7px);
+  height:2px; background:var(--ok);
+}
+.tl-grid {
+  display:grid; grid-template-columns:repeat(5,1fr);
+  gap:0; position:relative;
+}
+.tl { display:flex; flex-direction:column; align-items:center; text-align:center; padding:0 4px; }
+.dot {
+  width:14px; height:14px; border-radius:50%;
+  border:2px solid var(--bd); background:var(--bg);
+  position:relative; z-index:2;
+  margin-bottom:12px;
+  transition:transform .15s ease;
+}
+.tl:hover .dot { transform:scale(1.3); }
+.tl.done .dot  { background:var(--ok); border-color:var(--ok); }
+.tl.now  .dot  { width:18px; height:18px; margin-bottom:9px; background:var(--c); border-color:var(--c); box-shadow:0 0 0 4px var(--c-bg); }
+.tl-date { font-family:var(--mono); font-size:11px; font-weight:700; margin-bottom:4px; }
+.tl.done  .tl-date { color:var(--ok); }
+.tl.now   .tl-date { color:var(--c); }
+.tl:not(.done):not(.now) .tl-date { color:var(--muted); }
+.tl-name { font-size:11.5px; line-height:1.3; }
+.tl-who  { font-size:10px; color:var(--muted); margin-top:3px; }
+
+/* ── RESPONSIVE ──────────────────────────────── */
+@media (max-width: 640px) {
+  .hero { padding:34px 20px 28px; }
+  .hero h1 { font-size:26px; }
+  .wrap { padding:32px 14px 0; }
+  .file-grid { grid-template-columns:1fr; }
+  .fig-grid  { grid-template-columns:1fr 1fr; }
+  .tl-grid   { grid-template-columns:1fr 1fr; }
+  .tl-rail, .tl-done-rail { display:none; }
+  .rc-top  { padding:20px 22px 18px; }
+  .rc-body { padding:18px 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HERO ═══════════════════════════════════════════════ -->
+<header class="hero">
+  <div class="hero-inner">
+    <h1>
+      Handover Membre A
+      <span>→ Membres B, C, D · World Happiness Report</span>
+    </h1>
+    <p class="sub">Pipeline de préparation des données — Étapes 1 &amp; 2 complètes</p>
+    <div class="hero-meta">
+      <div class="m"><strong>De :</strong> Membre A — Lead Data Preparation &amp; Architecture</div>
+      <div class="m"><strong>Date :</strong> 29 juin 2026</div>
+      <div class="m"><strong>Statut :</strong> <span class="pill p-ok">✓ Livré</span></div>
+      <div class="m"><strong>Prochaine deadline :</strong> <span class="pill p-hot">⚡ 03 juil. — Membre C</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ═══ FICHIERS ════════════════════════════════════════════ -->
+  <div class="section">
+    <h2 class="sh">Fichiers disponibles dans le dossier projet</h2>
+    <div class="file-grid">
+      <div class="fc">
+        <span class="fc-badge">CSV</span>
+        <div class="fc-name">World-happiness-report-cleaned.csv</div>
+        <div class="fc-desc">Dataset nettoyé, prêt à l'emploi. Source principale pour B, C et D.</div>
+        <div class="fc-stats"><span>2 363 lignes</span><span>31 colonnes</span></div>
+      </div>
+      <div class="fc">
+        <span class="fc-badge">Notebook</span>
+        <div class="fc-name">data_preparation.ipynb</div>
+        <div class="fc-desc">Pipeline de préparation commenté. Ouvrir dans VS Code avec le noyau Python du .venv.</div>
+        <div class="fc-stats"><span>45 cellules</span><span>43 Ko</span></div>
+      </div>
+      <div class="fc">
+        <span class="fc-badge">Rapport</span>
+        <div class="fc-name">rapport_preprocessing.md</div>
+        <div class="fc-desc">Résumé textuel des choix de traitement. <strong>Prêt à copier-coller</strong> dans la section "Pre-processing" du Rendu 1.</div>
+        <div class="fc-stats"><span>Pour Membre D</span></div>
+      </div>
+      <div class="fc">
+        <span class="fc-badge">Figures</span>
+        <div class="fc-name">figures/ (7 fichiers PNG)</div>
+        <div class="fc-desc">Visualisations EDA générées par le notebook. Disponibles pour illustrer les rapports.</div>
+        <div class="fc-stats"><span>Fig. 01 → 07</span><span>110 dpi</span></div>
+      </div>
+    </div>
+    <div class="note n-ok">
+      <span class="note-mark">▶</span>
+      <div class="note-body"><strong>Générer le CSV et les figures :</strong> ouvrir <code>data_preparation.ipynb</code> dans VS Code → sélectionner le noyau Python → <em>Exécuter tout</em>. Nécessite : <code>pip install pandas numpy matplotlib seaborn scipy scikit-learn</code></div>
+    </div>
+  </div>
+
+  <!-- ═══ FIGURES ═════════════════════════════════════════════ -->
+  <div class="section">
+    <h2 class="sh">Figures déjà produites — ne pas dupliquer</h2>
+    <div class="fig-grid">
+      <div class="fi"><div class="fi-n">Fig. 01</div><div class="fi-lbl">Taux de valeurs manquantes + heatmap de localisation</div></div>
+      <div class="fi"><div class="fi-n">Fig. 02</div><div class="fi-lbl">Boxplots des 9 variables — détection des outliers</div></div>
+      <div class="fi"><div class="fi-n">Fig. 03</div><div class="fi-lbl">Distribution Life Ladder + évolution temporelle mondiale</div></div>
+      <div class="fi"><div class="fi-n">Fig. 04</div><div class="fi-lbl">Matrice de corrélation (triangulaire inférieure)</div></div>
+      <div class="fi"><div class="fi-n">Fig. 05</div><div class="fi-lbl">Top 10 / Bottom 10 pays (année la plus récente)</div></div>
+      <div class="fi"><div class="fi-n">Fig. 06</div><div class="fi-lbl">Distributions avant / après imputation</div></div>
+      <div class="fi"><div class="fi-n">Fig. 07</div><div class="fi-lbl">Feature engineering : catégories, YoY, score composite</div></div>
+      <div class="fi ph"><div class="fi-n">Fig. 08+</div><div class="fi-lbl">À produire par Membre B</div></div>
+    </div>
+  </div>
+
+  <!-- ═══ DICTIONNAIRE ════════════════════════════════════════ -->
+  <div class="section">
+    <h2 class="sh">Dictionnaire des colonnes <span class="sh-note">&ensp;·&ensp; 31 colonnes</span></h2>
+
+    <div class="note n-def" style="margin-bottom:20px;margin-top:0;">
+      <span class="note-mark">def</span>
+      <div class="note-body"><strong>r =</strong> coefficient de corrélation de Pearson avec <code>life_ladder</code> (la variable cible). Mesure la force du lien linéaire : proche de +1 = forte relation positive, proche de −1 = forte relation négative, proche de 0 = pas de lien. Valeurs calculées sur les 2 363 observations du dataset.</div>
+    </div>
+
+    <div class="dg">
+      <div class="dg-lbl">Identifiants — 2 colonnes</div>
+      <div class="tw"><table>
+        <thead><tr><th>Colonne</th><th>Type</th><th>Description</th><th>Utilisation</th></tr></thead>
+        <tbody>
+          <tr><td><code>country</code></td><td>str</td><td>Nom du pays (165 pays distincts)</td><td><span class="tag tb">B</span><span class="tag tc">C</span><span class="tag td">D</span></td></tr>
+          <tr><td><code>year</code></td><td>int</td><td>Année — de 2005 à 2023</td><td><span class="tag tb">B</span><span class="tag tc">C</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="dg">
+      <div class="dg-lbl">Variables originales nettoyées — 9 colonnes</div>
+      <div class="tw"><table>
+        <thead><tr><th>Colonne</th><th>Échelle</th><th>Description</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td><code>life_ladder</code></td><td>1.3 – 8.0</td><td><span class="tag tok">Cible</span> Score de bonheur subjectif (échelle de Cantril).</td><td>Variable à prédire</td></tr>
+          <tr><td><code>log_gdp_per_capita</code></td><td>5.5 – 11.7</td><td>PIB par habitant en log naturel.</td><td>r = +0.78</td></tr>
+          <tr><td><code>social_support</code></td><td>0 – 1</td><td>Proportion pouvant compter sur un proche en cas de problème.</td><td>r = +0.72</td></tr>
+          <tr><td><code>healthy_life_expectancy</code></td><td>~45 – 74 ans</td><td>Espérance de vie en bonne santé (OMS). Seule variable en années.</td><td>r = +0.72 — normalisation requise</td></tr>
+          <tr><td><code>freedom</code></td><td>0 – 1</td><td>Liberté perçue de faire des choix de vie.</td><td>r = +0.54</td></tr>
+          <tr><td><code>generosity</code></td><td>−0.34 – 0.70</td><td>Générosité résiduelle après contrôle PIB. Peut être négatif.</td><td>Faible corrélation</td></tr>
+          <tr><td><code>corruption</code></td><td>0 – 1</td><td>Perception corruption gouvernementale. <strong>1 = très corrompu.</strong></td><td>r = −0.43</td></tr>
+          <tr><td><code>positive_affect</code></td><td>0 – 1</td><td>Prévalence d'émotions positives la veille.</td><td>r = +0.54</td></tr>
+          <tr><td><code>negative_affect</code></td><td>0 – 1</td><td>Prévalence d'émotions négatives la veille.</td><td>r = −0.33</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="dg">
+      <div class="dg-lbl">Feature engineering — 4 colonnes créées</div>
+      <div class="tw"><table>
+        <thead><tr><th>Colonne</th><th>Type</th><th>Formule / Logique</th><th>Usage</th></tr></thead>
+        <tbody>
+          <tr><td><code>happiness_category</code></td><td>Ordinal</td><td>5 classes : Très malheureux (&lt;3.5) · Malheureux · Modéré · Heureux · Très heureux (≥7)</td><td><span class="tag tnw">Nouveau</span> <span class="tag tb">B</span><span class="tag tc">C</span> Filtres, ANOVA</td></tr>
+          <tr><td><code>life_ladder_yoy</code></td><td>float</td><td>life_ladder[t] − life_ladder[t−1] par pays. NaN en 1ère année de chaque pays : aucune année précédente disponible — normal, ne pas imputer.</td><td><span class="tag tnw">Nouveau</span> <span class="tag tb">B</span><span class="tag tc">C</span> Tendances, COVID</td></tr>
+          <tr><td><code>net_affect</code></td><td>float</td><td>positive_affect − negative_affect. Solde émotionnel.</td><td><span class="tag tnw">Nouveau</span> <span class="tag tb">B</span><span class="tag tc">C</span> KPI bien-être</td></tr>
+          <tr><td><code>economic_wellbeing_score</code></td><td>float (z-score)</td><td>0.35×z(gdp) + 0.35×z(social) + 0.30×z(santé). Poids proportionnels aux corrélations de chaque variable avec <code>life_ladder</code>. r = 0.84 avec la cible.</td><td><span class="tag tnw">Nouveau</span> <span class="tag tb">B</span><span class="tag tc">C</span> Indice composite</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="dg">
+      <div class="dg-lbl">Versions normalisées — 16 colonnes (8 Min-Max + 8 Z-score)</div>
+      <div class="tw"><table>
+        <thead><tr><th>Suffixe</th><th>Méthode</th><th>Échelle</th><th>Usage</th></tr></thead>
+        <tbody>
+          <tr><td><code>*_minmax</code></td><td>Min-Max</td><td>0 – 1</td><td><span class="tag tsc">Normalisé</span> <span class="tag tc">C</span> <strong>Radar charts</strong>, heatmaps — normalise les échelles hétérogènes.</td></tr>
+          <tr><td><code>*_zscore</code></td><td>Z-score (µ=0, σ=1)</td><td>≈ −3 à +3</td><td><span class="tag tsc">Normalisé</span> <span class="tag tb">B</span> <strong>Statistiques</strong>, ACP, clustering.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note n-blue" style="margin-top:10px;font-size:12.5px;">
+        <span class="note-mark">col</span>
+        <div class="note-body">Colonnes <code>_minmax</code> : <code>log_gdp_per_capita</code>, <code>social_support</code>, <code>healthy_life_expectancy</code>, <code>freedom</code>, <code>generosity</code>, <code>corruption</code>, <code>positive_affect</code>, <code>negative_affect</code> — et leurs équivalents <code>_zscore</code>.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ HANDOVER PAR RÔLE ═══════════════════════════════════ -->
+  <div class="section">
+    <h2 class="sh">Handover par rôle</h2>
+
+    <!-- B -->
+    <div class="rc rc-b">
+      <div class="rc-top" data-l="B">
+        <div class="rc-top-inner">
+          <div>
+            <div class="rc-name">Membre B — Lead DataViz &amp; Statistiques</div>
+            <div class="rc-sub">Rendu 1 · Visualisations statiques + analyses statistiques</div>
+          </div>
+        </div>
+      </div>
+      <div class="rc-body">
+        <ul class="tasks">
+          <li><span class="tn">1</span><div class="tb2">Charger <code>World-happiness-report-cleaned.csv</code> — aucun NaN sur les numériques (hors <code>life_ladder_yoy</code>, intentionnel).</div></li>
+          <li><span class="tn">2</span><div class="tb2"><strong>Ne pas dupliquer</strong> les Figures 1–7. Construire : scatter plots (life_ladder vs. prédicteurs), violin plots par happiness_category, radar Top 5 vs. Bottom 5, scatter bubble (GDP × social × life_ladder).<span class="hint">Colonnes <code>*_minmax</code> pour le radar · <code>*_zscore</code> pour les régressions.</span></div></li>
+          <li><span class="tn">3</span><div class="tb2"><strong>Axe prioritaire :</strong> lien corruption–bonheur (r = −0.43) et paradoxe richesse–générosité. Colonnes : <code>corruption</code>, <code>log_gdp_per_capita</code>, <code>generosity</code>.</div></li>
+          <li><span class="tn">4</span><div class="tb2"><strong>Analyses :</strong> ANOVA par <code>happiness_category</code>, régression multiple, distribution <code>life_ladder_yoy</code> avant/après 2020 (effet COVID).</div></li>
+          <li><span class="tn">5</span><div class="tb2"><strong>Corrélations à citer :</strong> GDP (+0.78), soutien social (+0.72), santé (+0.72), liberté (+0.54), corruption (−0.43).</div></li>
+        </ul>
+        <div class="note n-blue">
+          <span class="note-mark">→</span>
+          <div class="note-body"><strong>Colonnes recommandées :</strong> originales + <code>happiness_category</code> + <code>net_affect</code> + <code>*_minmax</code> (radar) + <code>*_zscore</code> (tests stats).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C -->
+    <div class="rc rc-c">
+      <div class="rc-top" data-l="C">
+        <div class="rc-top-inner">
+          <div>
+            <div class="rc-name">Membre C — Lead Business Intelligence</div>
+            <div class="rc-sub">Rendu 2 · Tableau de bord interactif (Power BI / Streamlit / Looker)</div>
+          </div>
+          <span class="pill p-hot">⚡ Deadline 03 juil.</span>
+        </div>
+      </div>
+      <div class="rc-body">
+        <ul class="tasks">
+          <li><span class="tn">1</span><div class="tb2"><strong>Importer immédiatement</strong> <code>World-happiness-report-cleaned.csv</code> dans votre outil BI — aucun pré-traitement requis.<span class="hint">Power BI : Obtenir les données → Texte/CSV.&ensp;Streamlit : <code>pd.read_csv('World-happiness-report-cleaned.csv')</code>.</span></div></li>
+          <li><span class="tn">2</span><div class="tb2"><strong>Filtres obligatoires :</strong> <code>year</code> (curseur), <code>happiness_category</code> (multi-valeur), <code>country</code> (recherche). Trois colonnes déjà présentes, typées correctement.</div></li>
+          <li><span class="tn">3</span><div class="tb2"><strong>Structure suggérée (4 pages) :</strong><span class="hint">Page 1 — Vue mondiale : carte choroplèthe + KPIs globaux.<br>Page 2 — Profil pays : radar 8 indicateurs (<code>*_minmax</code>) + rang + YoY.<br>Page 3 — Évolution : courbe life_ladder par pays, multi-pays.<br>Page 4 — Déterminants : scatter GDP/corruption vs. bonheur + bubble chart.</span></div></li>
+          <li><span class="tn">4</span><div class="tb2"><strong>KPIs clés :</strong> score bonheur, rang mondial, <code>net_affect</code>, <code>economic_wellbeing_score</code>, variation YoY.</div></li>
+          <li><span class="tn">5</span><div class="tb2">Radar chart : colonnes <code>*_minmax</code> exclusivement — sinon l'axe <code>healthy_life_expectancy</code> (0–74 ans) écrase tous les axes (0–1).</div></li>
+        </ul>
+        <div class="note n-amber">
+          <span class="note-mark">⚡</span>
+          <div class="note-body"><strong>Priorité absolue :</strong> importer le CSV et créer le squelette avec filtres aujourd'hui. Carte choroplèthe + radar chart en premier — visuels clés de la soutenance.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D -->
+    <div class="rc rc-d">
+      <div class="rc-top" data-l="D">
+        <div class="rc-top-inner">
+          <div>
+            <div class="rc-name">Membre D — Lead Gestion de Projet &amp; Rédaction</div>
+            <div class="rc-sub">Rendu 1 · Rapport d'exploration + coordination équipe</div>
+          </div>
+        </div>
+      </div>
+      <div class="rc-body">
+        <ul class="tasks">
+          <li><span class="tn">1</span><div class="tb2"><strong>Section "Pre-processing et Feature Engineering" :</strong> contenu entièrement rédigé dans <code>rapport_preprocessing.md</code>. Copier-coller dans le rapport, adapter la mise en page Word.</div></li>
+          <li><span class="tn">2</span><div class="tb2"><strong>Section "Cadre des données" :</strong> 165 pays, 2005–2023, 9 indicateurs WHR (Gallup World Poll). Panel non-cylindrique (= tous les pays n'ont pas de données pour chaque année — certains pays manquent avant 2010). Source : happinessreport.org.</div></li>
+          <li><span class="tn">3</span><div class="tb2"><strong>Résultats clés :</strong> PIB (r = 0.78), soutien social (r = 0.72), santé (r = 0.72) — top 3 déterminants. Corruption : corrélation négative la plus forte (r = −0.43).</div></li>
+          <li><span class="tn">4</span><div class="tb2"><strong>Figures :</strong> 7 PNG dans <code>figures/</code>. Fig. 4 (corrélation) et Fig. 5 (classement pays) sont les plus adaptées au rapport écrit.</div></li>
+          <li><span class="tn">5</span><div class="tb2"><strong>Limitation à signaler :</strong> anomalie Haïti 2006–2010 sur <code>healthy_life_expectancy</code> (valeurs aberrantes : 6.72 / 17.36 / 28 ans au lieu de ~50 ans). Traitée par interpolation linéaire dans le pipeline. Action pour le rapport : insérer dans la section Limitations — <em>"Les valeurs 2006–2010 de healthy_life_expectancy pour Haïti ont été interpolées en raison de données sources aberrantes ; ces observations sont à interpréter avec précaution."</em></div></li>
+        </ul>
+        <div class="note n-violet">
+          <span class="note-mark">→</span>
+          <div class="note-body"><strong>Prêt à l'emploi :</strong> <code>rapport_preprocessing.md</code> couvre "Nettoyage", "Normalisation" et "Feature engineering". Reste : Introduction (contexte métier) + intégration des visualisations de Membre B.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ CALENDRIER ══════════════════════════════════════════ -->
+  <div class="section">
+    <h2 class="sh">Calendrier des deadlines</h2>
+    <div class="tl-wrap">
+      <div class="tl-rail"></div>
+      <div class="tl-done-rail"></div>
+      <div class="tl-grid">
+        <div class="tl done">
+          <div class="dot"></div>
+          <div class="tl-date">03 juin</div>
+          <div class="tl-name">Cadrage équipe</div>
+          <div class="tl-who">Toute l'équipe</div>
+        </div>
+        <div class="tl done">
+          <div class="dot"></div>
+          <div class="tl-date">05 juin</div>
+          <div class="tl-name">Données + Rendu 1</div>
+          <div class="tl-who">Membres A, B, D</div>
+        </div>
+        <div class="tl now">
+          <div class="dot"></div>
+          <div class="tl-date">03 juil.</div>
+          <div class="tl-name">Dashboard + Rendu 2</div>
+          <div class="tl-who">⚡ Membre C</div>
+        </div>
+        <div class="tl">
+          <div class="dot"></div>
+          <div class="tl-date">29 juil.</div>
+          <div class="tl-name">Rapport final + revue</div>
+          <div class="tl-who">Toute l'équipe</div>
+        </div>
+        <div class="tl">
+          <div class="dot"></div>
+          <div class="tl-date">31 juil.</div>
+          <div class="tl-name">Soutenance 20 min.</div>
+          <div class="tl-who">Membre D</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

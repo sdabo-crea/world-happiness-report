@@ -1,0 +1,17 @@
+# Environnement Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# Claude Code (outil de développement interne)
+.claude/
+
+# Fichier zip source (contenu déjà extrait dans le dossier)
+Projet World Happiness.zip
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
